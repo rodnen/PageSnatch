@@ -21,7 +21,7 @@ class SavedPageAdapter(
     @SuppressLint("NotifyDataSetChanged")
     fun submitItems(newItems: List<SavedPageItem>) {
         items = newItems
-        notifyDataSetChanged()
+        notifyItemInserted(items.lastIndex)
     }
 
     companion object {

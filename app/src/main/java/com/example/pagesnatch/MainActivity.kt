@@ -24,10 +24,11 @@ import org.mozilla.geckoview.*
 import android.util.Log
 import android.view.View
 import android.widget.FrameLayout
+import com.example.pagesnatch.ui.SpacingItemDecoration
 
 class MainActivity : AppCompatActivity() {
 
-    private val SPAN_COUNT = 4
+    private val SPAN_COUNT = 5
 
     private lateinit var browser: Browser
     private lateinit var pagesManager: SavedPagesManager
@@ -100,8 +101,12 @@ class MainActivity : AppCompatActivity() {
             testAddPage()}
         )
 
+        val spacingInPx = resources.getDimensionPixelSize(R.dimen.grid_spacing)
+
         recyclerView.layoutManager = GridLayoutManager(this, SPAN_COUNT)
+        recyclerView.addItemDecoration(SpacingItemDecoration(SPAN_COUNT, spacingInPx, includeEdge = true))
         recyclerView.adapter = adapter
+
         adapter.submitItems(pagesManager.getItems())
     }
 
@@ -180,7 +185,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testAddPage(){
-        pagesManager.addPage("TEST", "pixiv.net")
+        val urls = mutableListOf("pixiv.net", "youtube.com", "twitch.com", "pinterest.com", "github.com")
+        pagesManager.addPage("TEST", urls.random())
     }
 
 }

@@ -5,16 +5,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:gravity="top"
     android:padding="8dp"
-    android:elevation="8dp">
+    android:layout_margin="0dp"
+    android:background="@android:color/transparent">
 
     <ImageView
         android:id="@+id/pageIcon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="34dp"
+        android:layout_height="34dp"
         android:src="@drawable/plus"
-        android:background="@drawable/bg_dialog_input_rounded"
-        android:padding="8dp"
-        android:elevation="8dp"
+        android:background="@drawable/bg_page_rounded"
+        android:padding="10dp"
         android:scaleType="fitCenter"
         app:tint="@color/dialog_add_pg_input_txt" />
 </RelativeLayout>

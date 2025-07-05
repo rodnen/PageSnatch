@@ -1,7 +1,6 @@
 package com.example.pagesnatch.ui
 
 import android.annotation.SuppressLint
-import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,15 +12,22 @@ import com.example.pagesnatch.browser.SavedPageItem
 
 class SavedPageAdapter(
     private val onItemClick: (SavedPageItem.Page) -> Unit,
+    private val onItemLongClick: ((SavedPageItem.Page) -> Unit)? = null,
     private val onAddClick: () -> Unit
 ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var items: List<SavedPageItem> = emptyList()
 
     @SuppressLint("NotifyDataSetChanged")
-    fun submitItems(newItems: List<SavedPageItem>) {
+    fun submitItems(newItems: List<SavedPageItem>, index: Int? = null) {
         items = newItems
-        notifyItemInserted(items.lastIndex)
+        if(index == null){
+            notifyItemInserted(items.lastIndex)
+        }
+        else{
+            notifyItemChanged(index)
+        }
+
     }
 
     companion object {
@@ -35,8 +41,19 @@ class SavedPageAdapter(
 
         fun bind(page: SavedPageItem.Page) {
             title.text = page.title
-            icon.setImageBitmap(page.favicon)
+
+            if (page.favicon != null) {
+                icon.setImageBitmap(page.favicon)
+            } else {
+                icon.setImageResource(R.drawable.ic_favicon_placeholder) // назва без розширення
+            }
+
             itemView.setOnClickListener { onItemClick(page) }
+
+            itemView.setOnLongClickListener {
+                onItemLongClick?.invoke(page)
+                true
+            }
         }
     }
 

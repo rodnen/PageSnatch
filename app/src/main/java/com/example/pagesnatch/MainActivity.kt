@@ -21,9 +21,8 @@ import com.example.pagesnatch.browser.Browser
 import com.example.pagesnatch.browser.SavedPagesManager
 import com.example.pagesnatch.ui.SavedPageAdapter
 import org.mozilla.geckoview.*
-import android.util.Log
-import android.view.View
 import android.widget.FrameLayout
+import com.example.pagesnatch.browser.SavedPageItem
 import com.example.pagesnatch.ui.SpacingItemDecoration
 
 class MainActivity : AppCompatActivity() {
@@ -95,10 +94,12 @@ class MainActivity : AppCompatActivity() {
     private fun setupRecyclerViewListener(){
         val adapter = SavedPageAdapter(
             onItemClick = { browser.loadUrl(it.url)},
-            onAddClick = { /*showAddPageDialog(this) { title, url ->
-                pagesManager.addPage(title, url)*/
-            /*}*/
-            testAddPage()}
+            onItemLongClick = { page -> showEditPageDialog(this, page) {
+                title, url -> pagesManager.editPage(page, title, url)
+            } },
+            onAddClick = { showAddPageDialog(this) {
+                title, url -> pagesManager.addPage(title, url)
+            } /*testAddPage()*/}
         )
 
         val spacingInPx = resources.getDimensionPixelSize(R.dimen.grid_spacing)
@@ -159,6 +160,10 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    private fun trimUrl (url: String) : String{
+        return url.replace(" ", "")
+    }
+
     private fun showAddPageDialog(context: Context, onAdd: (title: String, url: String) -> Unit) {
         val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_page, null)
         val dialog = AlertDialog.Builder(context)
@@ -167,11 +172,40 @@ class MainActivity : AppCompatActivity() {
 
         val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
         val inputUrl = dialogView.findViewById<EditText>(R.id.inputUrl)
-        val btnAdd = dialogView.findViewById<Button>(R.id.btnAdd)
+        val btnSubmit = dialogView.findViewById<Button>(R.id.btnSubmit)
 
-        btnAdd.setOnClickListener {
+        btnSubmit.setOnClickListener {
             val title = inputTitle.text.toString().trim()
-            val url = inputUrl.text.toString().trim()
+            val url = trimUrl(inputUrl.text.toString())
+            if (title.isNotEmpty() && url.isNotEmpty()) {
+                onAdd(title, url)
+                dialog.dismiss()
+            } else {
+                Toast.makeText(context, "Заповніть усі поля", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        dialog.window?.setBackgroundDrawableResource(android.R.color.transparent)
+        dialog.show()
+    }
+
+    private fun showEditPageDialog (context: Context, page: SavedPageItem.Page, onAdd: (title: String, url: String) -> Unit) {
+        val dialogView = LayoutInflater.from(context).inflate(R.layout.dialog_add_page, null)
+        val dialog = AlertDialog.Builder(context)
+            .setView(dialogView)
+            .create()
+
+        val inputTitle = dialogView.findViewById<EditText>(R.id.inputTitle)
+        val inputUrl = dialogView.findViewById<EditText>(R.id.inputUrl)
+        val btnSubmit = dialogView.findViewById<Button>(R.id.btnSubmit)
+
+        inputTitle.setText(page.title)
+        inputUrl.setText(page.url)
+        btnSubmit.text = "Зберегти"
+
+        btnSubmit.setOnClickListener {
+            val title = inputTitle.text.toString().trim()
+            val url = trimUrl(inputUrl.text.toString())
             if (title.isNotEmpty() && url.isNotEmpty()) {
                 onAdd(title, url)
                 dialog.dismiss()
@@ -185,7 +219,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun testAddPage(){
-        val urls = mutableListOf("pixiv.net", "youtube.com", "twitch.com", "pinterest.com", "github.com")
+        val urls = mutableListOf("pixiv.net", "youtube.com", "twitch.com", "pinterest.com", "github.com", "placeholder")
         pagesManager.addPage("TEST", urls.random())
     }
 

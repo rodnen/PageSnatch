@@ -12,8 +12,8 @@
 
     <color name="app_iconColor">#858585</color>
 
-    <color name="dialog_add_pg_bg">#000000</color>
-    <color name="dialog_add_pg_input_bg">#121212</color>
+    <color name="dialog_add_pg_bg">#CC000000</color>
+    <color name="dialog_add_pg_input_bg">#4D5156</color>
     <color name="dialog_add_pg_input_txt">#E9E9E9</color>
 
 </resources>

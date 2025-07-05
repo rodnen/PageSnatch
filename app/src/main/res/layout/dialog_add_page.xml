@@ -16,7 +16,8 @@
         android:inputType="textPersonName"
         android:background="@drawable/bg_dialog_input_rounded"
         android:textColor="@color/dialog_add_pg_input_txt"
-        android:textColorHint="#3AFFFFFF"
+        android:textColorHint="#BCBCBC"
+        android:singleLine="true"
         android:padding="10dp" />
 
     <EditText
@@ -25,14 +26,15 @@
         android:layout_height="wrap_content"
         android:hint="URL"
         android:inputType="textUri"
-        android:padding="10dp"
         android:background="@drawable/bg_dialog_input_rounded"
         android:textColor="@color/dialog_add_pg_input_txt"
-        android:textColorHint="#3AFFFFFF"
+        android:textColorHint="#BCBCBC"
+        android:singleLine="true"
+        android:padding="10dp"
         android:layout_marginTop="12dp" />
 
     <Button
-        android:id="@+id/btnAdd"
+        android:id="@+id/btnSubmit"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Додати"
